@@ -2,29 +2,30 @@
 
 ## Overview
 
-This document lists the systems and tools currently used in the Home SOC Lab.
+This document lists the systems and security components currently used in the Home SOC Lab.
 
-The environment is intentionally small and isolated so that security events can be generated, collected, analyzed, and documented safely.
+The environment is designed to simulate a small Security Operations Center workflow where activity can be generated, logged, forwarded, analyzed, and documented.
 
 ---
 
-## Virtual Machines
+## Systems
 
 | Asset | Operating System | Purpose |
 |---|---|---|
-| SOC-Windows | Windows 11 | Endpoint, Windows Security log source, and Sysmon telemetry source |
-| Kali Linux VM | Kali Linux | Authorized testing, reconnaissance, and activity generation |
+| Ubuntu Laptop | Ubuntu Linux | Hosts Splunk Enterprise and serves as the central SIEM system |
+| SOC-Windows | Windows 11 VM | Monitored endpoint, Windows Security log source, and Sysmon telemetry source |
+| Kali Linux VM | Kali Linux | Authorized testing, scanning, and security activity generation |
 
 ---
 
 ## Security Monitoring Components
 
-| Component | Purpose |
-|---|---|
-| Splunk Enterprise | SIEM platform used to search, analyze, and detect security events |
-| Splunk Universal Forwarder | Sends Windows event logs and Sysmon data to Splunk |
-| Sysmon | Provides detailed Windows endpoint telemetry |
-| Windows Security Event Log | Records authentication and security-related events |
+| Component | Location | Purpose |
+|---|---|---|
+| Splunk Enterprise | Ubuntu Laptop | Central SIEM platform used for log search, investigation, and detection |
+| Splunk Universal Forwarder | SOC-Windows | Forwards Windows logs and Sysmon telemetry to Splunk |
+| Sysmon | SOC-Windows | Provides detailed Windows endpoint telemetry |
+| Windows Security Event Log | SOC-Windows | Records authentication and other security-related activity |
 
 ---
 
@@ -32,54 +33,83 @@ The environment is intentionally small and isolated so that security events can 
 
 | Platform | Purpose |
 |---|---|
-| Oracle VirtualBox | Hosts and connects the virtual machines used in the lab |
+| Oracle VirtualBox | Hosts the Windows 11 and Kali Linux virtual machines |
 
 ---
 
-## Current Network Roles
+## Current System Roles
+
+### Ubuntu Laptop
+
+Primary functions:
+
+- Hosts Splunk Enterprise
+- Receives logs from the Windows endpoint
+- Stores and searches Windows Security events
+- Stores and searches Sysmon telemetry
+- Runs SPL queries
+- Supports detection and investigation workflows
 
 ### SOC-Windows
 
 Primary functions:
 
 - Windows endpoint
-- Security event generation
 - Windows Security Event Log source
 - Sysmon telemetry source
 - Splunk Universal Forwarder host
+- Target system for authorized lab testing
 
 ### Kali Linux VM
 
 Primary functions:
 
 - Authorized testing
+- Network reconnaissance
 - Nmap scanning
 - SMB authentication testing
-- Generating activity for detection practice
+- Generating security telemetry for detection practice
 
 ---
 
 ## Current Lab Scope
 
-The current lab contains:
+The current lab includes:
 
-- One Windows endpoint
+- One Ubuntu SIEM host
+- One Windows 11 endpoint
 - One Kali Linux testing system
-- One Splunk Enterprise instance
 - Windows Security Event collection
 - Sysmon telemetry collection
+- Splunk log ingestion
 - Authentication failure detection
+- Network connection monitoring
+
+---
+
+## Current Detection Use Cases
+
+The lab currently supports:
+
+- Sysmon network connection analysis
+- Windows failed logon investigation
+- Repeated authentication failure detection
+- Source IP correlation
+- Account-based event aggregation
 
 ---
 
 ## Future Expansion
 
-Possible future assets may include:
+Possible future additions include:
 
-- Ubuntu Server VM
+- Wireshark packet analysis
+- Splunk dashboards
 - Additional Windows endpoints
 - Additional Linux endpoints
-- Wireshark packet captures
-- Additional SIEM integrations
-- Active Directory lab systems
-- Firewall or IDS telemetry
+- Active Directory
+- Windows Defender Firewall logging
+- IDS/IPS telemetry
+- RDP authentication monitoring
+- Additional incident reports
+- MITRE ATT&CK mappings
