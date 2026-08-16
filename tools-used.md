@@ -1,102 +1,47 @@
 # Tools Used
 
-This file documents the tools planned for the Home SOC Lab.
+## Overview
 
-## VirtualBox
+This document describes the tools currently used in the Home SOC Lab and the purpose of each one.
 
-VirtualBox will be used to create and manage virtual machines for the lab.
+Only tools that have been actively used in the lab are listed as current tools.
 
-Purpose:
+---
 
-- Run Windows, Linux, and security testing machines
-- Practice safe lab networking
-- Build a simulated enterprise environment
+## Ubuntu Linux
 
-## Windows Event Viewer
+Ubuntu Linux is installed on the physical laptop that hosts Splunk Enterprise.
 
-Windows Event Viewer will be used to review endpoint logs.
+The Ubuntu system acts as the central SIEM host for the lab.
 
-Purpose:
+Current responsibilities include:
 
-- Review failed login attempts
-- Review successful logins
-- Review system events
-- Review application events
-- Practice Windows log analysis
+- Hosting Splunk Enterprise
+- Receiving forwarded Windows logs
+- Receiving Sysmon telemetry
+- Running Splunk searches
+- Supporting detection and investigation workflows
 
-## Wazuh SIEM
+---
 
-Wazuh will be used as the main SIEM platform for this lab.
+## Oracle VirtualBox
 
-Purpose:
+Oracle VirtualBox is used to host the lab virtual machines.
 
-- Collect logs
-- Generate security alerts
-- Monitor endpoints
-- Practice alert investigation
-- Build SOC analyst skills
+Current virtual machines include:
 
-## Sysmon
+- Windows 11
+- Kali Linux
 
-Sysmon will be used to collect advanced Windows endpoint activity.
+VirtualBox provides the isolated environment used for security testing and monitoring.
 
-Purpose:
+---
 
-- Track process creation
-- Track network connections
-- Track suspicious activity
-- Improve Windows visibility
+## Windows 11
 
-## Kali Linux
+Windows 11 is used as the primary monitored endpoint.
 
-Kali Linux will be used as the testing machine.
+Hostname:
 
-Purpose:
-
-- Run safe scans inside the lab
-- Practice Nmap scanning
-- Generate security events for detection
-
-## Nmap
-
-Nmap will be used for network scanning.
-
-Purpose:
-
-- Identify open ports
-- Identify running services
-- Simulate reconnaissance activity
-- Create alerts for investigation
-
-## Wireshark
-
-Wireshark will be used for packet analysis.
-
-Purpose:
-
-- Capture network traffic
-- Review protocols
-- Understand packet-level activity
-- Practice basic network analysis
-
-## PowerShell
-
-PowerShell will be used for Windows administration and security testing.
-
-Purpose:
-
-- Run commands
-- Review system information
-- Practice Windows security monitoring
-- Generate activity for logging
-
-## Linux Command Line
-
-The Linux command line will be used to manage Ubuntu and Kali systems.
-
-Purpose:
-
-- Navigate Linux systems
-- Review logs
-- Manage services
-- Practice cybersecurity fundamentals
+```text
+SOC-Windows
