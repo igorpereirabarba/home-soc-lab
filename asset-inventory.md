@@ -2,6 +2,139 @@
 
 ## Overview
 
+This document identifies the systems and security components currently used in the Home SOC Lab.
+
+The environment is designed to simulate a small Security Operations Center workflow where security activity can be generated, collected, forwarded, analyzed, detected, and documented.
+
+---
+
+# Systems
+
+| Asset | Operating System | Purpose |
+|---|---|---|
+| Ubuntu Laptop | Ubuntu Linux | Hosts Splunk Enterprise and serves as the central SIEM system |
+| SOC-Windows | Windows 11 VM | Monitored endpoint, Windows Security log source, and Sysmon telemetry source |
+| Kali Linux VM | Kali Linux | Authorized security testing, scanning, and activity generation |
+
+---
+
+# Security Monitoring Components
+
+| Component | Location | Purpose |
+|---|---|---|
+| Splunk Enterprise | Ubuntu Laptop | Central SIEM used for searching, analyzing, and detecting security activity |
+| Splunk Universal Forwarder | SOC-Windows | Sends Windows Security and Sysmon logs to Splunk |
+| Sysmon | SOC-Windows | Provides detailed endpoint telemetry |
+| Windows Security Event Log | SOC-Windows | Records authentication and security-related events |
+
+---
+
+# Virtualization Platform
+
+| Platform | Purpose |
+|---|---|
+| Oracle VirtualBox | Hosts the Windows 11 and Kali Linux virtual machines |
+
+---
+
+# Asset Roles
+
+## Ubuntu Laptop
+
+The Ubuntu laptop serves as the central SIEM host.
+
+Current responsibilities include:
+
+- Hosting Splunk Enterprise
+- Receiving Windows Security logs
+- Receiving Sysmon telemetry
+- Running SPL searches
+- Supporting security investigations
+- Supporting detection development
+
+---
+
+## SOC-Windows
+
+Hostname:
+
+```text
+SOC-Windows
+```
+
+Operating System:
+
+```text
+Windows 11
+```
+
+Primary responsibilities:
+
+- Monitored endpoint
+- Windows Security Event Log source
+- Sysmon telemetry source
+- Splunk Universal Forwarder host
+- Target endpoint for authorized security testing
+
+---
+
+## Kali Linux VM
+
+Operating System:
+
+```text
+Kali Linux
+```
+
+Primary responsibilities:
+
+- Authorized security testing
+- Network reconnaissance
+- Nmap scanning
+- SMB authentication testing
+- Generating security telemetry for detection practice
+
+---
+
+# Current Lab Capabilities
+
+The environment currently supports:
+
+- Windows Security Event collection
+- Sysmon telemetry collection
+- Splunk log ingestion
+- Endpoint network monitoring
+- Failed authentication analysis
+- Source IP correlation
+- Account-based event aggregation
+- Threshold-based detection rules
+
+---
+
+# Current Detection Use Cases
+
+Current detection exercises include:
+
+1. Sysmon Event ID 3 network connection analysis
+2. Windows Security Event ID 4625 failed login analysis
+3. Repeated failed authentication detection
+
+---
+
+# Future Assets
+
+Possible future additions include:
+
+- Additional Windows endpoints
+- Additional Linux endpoints
+- Active Directory domain controller
+- Windows Defender Firewall telemetry
+- IDS/IPS telemetry
+- Wireshark packet captures
+- Additional SIEM data sources# Asset Inventory
+
+## Overview
+
 This document lists the systems and security components currently used in the Home SOC Lab.
 
 The environment is designed to simulate a small Security Operations Center workflow where activity can be generated, logged, forwarded, analyzed, and documented.
