@@ -1,5 +1,226 @@
 # Incident Report Template
 
+## Incident ID
+
+```text
+INC-XXX
+```
+
+---
+
+## Incident Title
+
+Enter a concise title describing the detected activity.
+
+Example:
+
+```text
+Repeated Failed Authentication Attempts
+```
+
+---
+
+## Date and Time
+
+```text
+YYYY-MM-DD HH:MM
+```
+
+---
+
+## Detection Source
+
+```text
+Splunk Enterprise
+Windows Security Event Log
+```
+
+---
+
+## Severity
+
+Select one:
+
+- Low
+- Medium
+- High
+- Critical
+
+---
+
+# Summary
+
+Provide a concise description of what was detected.
+
+Include:
+
+- What happened
+- What system was affected
+- Where the activity originated
+- What detection identified the activity
+
+---
+
+# Affected Asset
+
+```text
+Hostname:
+IP Address:
+Operating System:
+```
+
+---
+
+# SIEM Host
+
+```text
+Operating System: Ubuntu Linux
+Platform: Splunk Enterprise
+```
+
+---
+
+# Source System
+
+```text
+Source IP:
+Hostname:
+Operating System:
+```
+
+---
+
+# Target Account
+
+```text
+Account Name:
+```
+
+---
+
+# Event Information
+
+```text
+Event ID:
+Log Source:
+Event Count:
+Protocol:
+```
+
+---
+
+# Detection Query
+
+```spl
+Insert SPL query here
+```
+
+---
+
+# Investigation
+
+Document the investigation process.
+
+Questions to answer:
+
+- What account was targeted?
+- What source IP generated the activity?
+- How many events occurred?
+- Over what period did the events occur?
+- Was authentication successful?
+- Were other accounts targeted?
+- Were related events present?
+- Was the activity expected or suspicious?
+
+---
+
+# Findings
+
+Summarize what was discovered during the investigation.
+
+Example:
+
+The investigation identified five failed authentication attempts against one account from a single source IP address. No successful authentication was observed.
+
+---
+
+# Indicators
+
+```text
+Source IP:
+Username:
+Event ID:
+Destination Host:
+Protocol:
+```
+
+---
+
+# Response Actions
+
+Document actions taken during the investigation.
+
+Possible actions include:
+
+- Reviewed authentication events
+- Identified source IP
+- Identified targeted account
+- Checked for successful authentication
+- Reviewed related events
+- Confirmed whether activity was authorized
+- Tested detection logic
+- Documented findings
+
+---
+
+# Root Cause
+
+Describe the reason the activity occurred.
+
+---
+
+# Resolution
+
+Describe how the incident was resolved or closed.
+
+---
+
+# Lessons Learned
+
+Document lessons learned from the investigation.
+
+Possible examples:
+
+- Which Windows event identified the activity
+- Which fields were useful during investigation
+- Which SPL commands were useful
+- How detection logic could be improved
+
+---
+
+# MITRE ATT&CK Mapping
+
+```text
+Tactic:
+Technique:
+Technique ID:
+```
+
+Complete this section when applicable.
+
+---
+
+# Status
+
+Select one:
+
+```text
+Open
+Investigating
+Resolved
+Closed
+```# Incident Report Template
+
 ## Incident Title
 
 Example: Multiple Failed Login Attempts Detected
