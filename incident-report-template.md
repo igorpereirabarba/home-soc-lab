@@ -23,7 +23,7 @@ Repeated Failed Authentication Attempts
 ## Date and Time
 
 ```text
-YYYY-MM-DD HH:MM
+2026-08-16 00:35
 ```
 
 ---
