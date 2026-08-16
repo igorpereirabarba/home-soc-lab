@@ -2,145 +2,267 @@
 
 ## Project Overview
 
-This project documents the creation of a beginner home Security Operations Center (SOC) lab designed to practice security monitoring, log analysis, alert investigation, and incident response.
+This project documents the creation of a beginner Security Operations Center (SOC) home lab designed to build hands-on experience with security monitoring, Windows event logs, endpoint telemetry, SIEM analysis, and threat detection.
 
-The goal of this lab is to build hands-on experience with tools and concepts used by SOC analysts, including SIEM monitoring, Windows Event Logs, Linux logs, endpoint activity, network scanning, and technical documentation.
+The lab uses virtual machines to simulate a small security environment where activity can be generated, logged, forwarded, and analyzed.
+
+The current focus is on using Splunk to investigate Windows endpoint activity and create simple detections based on real event data generated inside an isolated lab environment.
+
+---
 
 ## Career Goal
 
-This lab was created as part of my path toward becoming a SOC Analyst / Cybersecurity Analyst. The project focuses on building practical skills in:
+This lab was created as part of my path toward becoming a SOC Analyst / Cybersecurity Analyst.
 
-* Security monitoring
-* Log analysis
-* Incident response
-* SIEM alert investigation
-* Endpoint security
-* Network traffic analysis
-* Threat detection
-* Technical documentation
+The goal is to gain practical experience with skills commonly used in security operations, including:
+
+- SIEM monitoring
+- Windows log analysis
+- Endpoint telemetry
+- Authentication monitoring
+- Threat detection
+- Incident investigation
+- Splunk SPL
+- Network reconnaissance analysis
+- Technical documentation
+- Security event correlation
+
+---
 
 ## Lab Environment
 
-The lab will use virtual machines to simulate a small enterprise environment.
+| System | Purpose |
+|---|---|
+| Windows 11 VM | Endpoint and Windows log source |
+| Kali Linux VM | Authorized testing and activity generation |
+| Splunk Enterprise | SIEM platform used for log search and detection |
+| Splunk Universal Forwarder | Sends Windows logs to Splunk |
+| Sysmon | Provides detailed Windows endpoint telemetry |
+| Oracle VirtualBox | Hosts the virtual lab environment |
 
-| System           | Purpose                                  |
-| ---------------- | ---------------------------------------- |
-| Windows 10/11 VM | Workstation and endpoint log source      |
-| Ubuntu Server VM | Linux server and log source              |
-| Kali Linux VM    | Testing and scanning machine             |
-| Wazuh SIEM       | Log collection, monitoring, and alerting |
+---
 
-## Tools Planned
+## Tools Used
 
-* VirtualBox
-* Windows Event Viewer
-* Wazuh SIEM
-* Sysmon
-* Ubuntu Server
-* Kali Linux
-* Nmap
-* Wireshark
-* PowerShell
-* Linux command line
+- Oracle VirtualBox
+- Windows 11
+- Kali Linux
+- Splunk Enterprise
+- Splunk Universal Forwarder
+- Sysmon
+- Windows PowerShell
+- Windows Security Event Log
+- Nmap
+- smbclient
+- Splunk Search Processing Language (SPL)
 
-## Planned Network Diagram
+---
+
+## Lab Architecture
 
 ```text
-Host Laptop
-│
-├── Windows VM
-│   └── Sends Windows logs to Wazuh
-│
-├── Ubuntu Server VM
-│   └── Sends Linux logs to Wazuh
-│
-├── Kali Linux VM
-│   └── Simulates scanning and testing activity
-│
-└── Wazuh Server
-    └── Collects and displays security alerts
-```
+Kali Linux VM
+      |
+      | Authorized test activity
+      v
+Windows 11 VM
+      |
+      | Windows Security Logs
+      | Sysmon Telemetry
+      v
+Splunk Universal Forwarder
+      |
+      v
+Splunk Enterprise
+      |
+      v
+Searches / Detection Rules / Investigation
+Detection Lab 1: Sysmon Network Connections
 
-## Project Phases
+The first phase of the lab focused on verifying that Sysmon endpoint telemetry was being successfully generated on the Windows endpoint and forwarded into Splunk.
 
-### Phase 0: Documentation
+Sysmon Event ID 3 records network connection activity from processes running on the Windows system.
 
-Before installing tools, this phase focuses on creating the project structure, documenting the lab purpose, identifying planned assets, and defining learning goals.
+Splunk Search
+index=main host="SOC-Windows"
+source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+"<EventID>3</EventID>"
 
-### Phase 1: Windows Logging
+This confirmed that Splunk was successfully receiving Sysmon network telemetry from the Windows endpoint.
 
-This phase will focus on Windows Event Viewer, failed login attempts, successful logins, system logs, application logs, and basic endpoint investigation.
+Skills Demonstrated
+Sysmon configuration
+Windows endpoint monitoring
+Splunk log ingestion
+Network connection analysis
+Process-to-network correlation
+SIEM troubleshooting
+Detection Lab 2: Failed SMB Authentication Detection
 
-### Phase 2: SIEM Setup
+The next phase of the lab focused on detecting repeated failed authentication attempts.
 
-This phase will focus on installing Wazuh, connecting endpoint agents, collecting logs, and reviewing security alerts.
+A local Windows lab account named socuser was created on the Windows VM.
 
-### Phase 3: Network Scanning Detection
+From the Kali Linux VM, controlled failed SMB authentication attempts were generated against the Windows endpoint.
 
-This phase will use Kali Linux and Nmap to simulate basic reconnaissance activity inside the lab environment.
+These failed authentication attempts generated Windows Security Event ID 4625 events.
 
-### Phase 4: Incident Response Documentation
+Windows Event ID 4625
 
-This phase will focus on writing SOC-style investigation notes and incident reports based on alerts generated in the lab.
+Windows Security Event ID 4625 represents:
 
-## Planned SOC Investigations
+An account failed to log on
 
-### 1. Failed Login Detection
+Splunk was used to identify and analyze the authentication failures.
 
-Objective: Detect failed login attempts on a Windows endpoint.
+Initial Search
+index=main host="SOC-Windows"
+source="WinEventLog:Security"
+EventCode=4625
+earliest=-30m
 
-Skills practiced:
+The search successfully returned the failed login activity generated from the Kali Linux VM.
 
-* Windows Event Viewer
-* Security logs
-* Failed authentication investigation
-* SOC-style documentation
+Detection Query
 
-### 2. Nmap Scan Detection
+The following SPL query was created to group failed login attempts by username and source IP address:
 
-Objective: Use Kali Linux to scan a lab machine and identify suspicious network activity.
+index=main host="SOC-Windows"
+source="WinEventLog:Security"
+EventCode=4625
+earliest=-30m
+| stats count by Account_Name, Source_Network_Address
 
-Skills practiced:
+A threshold was then added to identify repeated authentication failures:
 
-* Nmap
-* Port scanning
-* Network reconnaissance
-* Alert review
-* Incident analysis
+index=main host="SOC-Windows"
+source="WinEventLog:Security"
+EventCode=4625
+earliest=-30m
+| stats count by Account_Name, Source_Network_Address
+| where count >= 5
+Detection Result
 
-### 3. Suspicious PowerShell Activity
+The detection successfully identified repeated authentication failures against the test account.
 
-Objective: Generate and investigate suspicious PowerShell activity on a Windows endpoint.
+Example result:
 
-Skills practiced:
+Account_Name: socuser
+Source_Network_Address: 192.168.50.10
+Count: 5
 
-* PowerShell logging
-* Windows security monitoring
-* Endpoint investigation
-* Detection documentation
+This demonstrated the full detection workflow:
 
-## What I Am Learning
+Kali Linux
+    ↓
+Failed SMB authentication attempts
+    ↓
+Windows Security Event ID 4625
+    ↓
+Splunk Universal Forwarder
+    ↓
+Splunk Enterprise
+    ↓
+SPL Detection Query
+    ↓
+Repeated Failed Login Detection
+Screenshots
+Sysmon Network Telemetry
 
-Through this lab, I am learning how SOC analysts collect logs, review alerts, investigate suspicious activity, document findings, and recommend response actions.
+Windows Failed Authentication Events
 
-This project strengthens my understanding of:
+Failed Login Detection
 
-* Windows security events
-* Linux system activity
-* SIEM dashboards
-* Alert investigation
-* Network reconnaissance
-* Incident response workflow
-* Cybersecurity documentation
+Skills Demonstrated
 
-## Future Improvements
+Through this lab, I have practiced:
 
-Planned improvements include:
+Building a virtual SOC environment
+Configuring Windows endpoint logging
+Using Sysmon for endpoint telemetry
+Forwarding Windows logs into Splunk
+Searching security events using SPL
+Investigating Windows Event ID 4625
+Identifying source IP addresses
+Grouping events using stats
+Creating threshold-based detections
+Detecting repeated authentication failures
+Using Kali Linux for controlled security testing
+Using Nmap for service discovery
+Analyzing SMB authentication activity
+Documenting security investigations
+Security Testing Scope
 
-* Add Sysmon advanced logging
-* Add MITRE ATT&CK mapping
-* Add phishing email analysis
-* Add vulnerability scanning with Nessus Essentials or OpenVAS
-* Add Splunk or Microsoft Sentinel practice
-* Create more incident reports
-* Add screenshots for every phase
+All testing performed in this project was conducted inside my own isolated virtual lab environment.
+
+The Windows and Kali Linux virtual machines were created specifically for cybersecurity learning, monitoring, and detection practice.
+
+No external systems were targeted.
+
+Future Lab Expansion
+
+Future additions to this project may include:
+
+Splunk alerts
+Additional Windows detection rules
+PowerShell activity detection
+Suspicious process execution detection
+Account creation monitoring
+Privilege escalation monitoring
+RDP authentication monitoring
+Port scan detection
+Windows Defender Firewall logging
+Wireshark packet analysis
+Incident response documentation
+SOC investigation playbooks
+MITRE ATT&CK mapping
+Dashboard creation
+Additional Linux log monitoring
+Incident Documentation
+
+This repository also includes an incident report template that can be used to document future detections and investigations.
+
+Future incident reports may include:
+
+Repeated failed authentication attempts
+Suspicious PowerShell activity
+Network reconnaissance
+Account creation
+Unusual process execution
+Possible privilege escalation activity
+Project Status
+
+This project is actively being developed as I continue building practical SOC and cybersecurity skills.
+
+Current progress:
+
+ Create Windows VM
+ Create Kali Linux VM
+ Configure VirtualBox networking
+ Install Sysmon
+ Install Splunk Enterprise
+ Configure Splunk Universal Forwarder
+ Ingest Sysmon logs
+ Ingest Windows Security logs
+ Analyze Sysmon Event ID 3
+ Generate controlled failed authentication attempts
+ Detect Windows Event ID 4625
+ Build failed-login SPL detection
+ Create Splunk alerts
+ Build additional detection rules
+ Create incident reports
+ Map detections to MITRE ATT&CK
+ Build SOC dashboards
+Author
+
+Igor Barbosa
+
+Cybersecurity student focused on developing practical experience in:
+
+Security Operations
+SOC Analysis
+SIEM Monitoring
+Threat Detection
+Endpoint Security
+Network Security
+Incident Response
