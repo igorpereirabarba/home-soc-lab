@@ -153,6 +153,7 @@ Count: 5
 
 This demonstrated the full detection workflow:
 
+```text
 Kali Linux
     ↓
 Failed SMB authentication attempts
@@ -166,14 +167,23 @@ Splunk Enterprise
 SPL Detection Query
     ↓
 Repeated Failed Login Detection
-Screenshots
-Sysmon Network Telemetry
+```
 
-Windows Failed Authentication Events
+## Screenshots
 
-Failed Login Detection
+### Sysmon Network Telemetry
 
-Skills Demonstrated
+![Sysmon Network Telemetry](screenshots/sysmon-network-events.png)
+
+### Windows Failed Authentication Events
+
+![Windows Event ID 4625](screenshots/4625-events.png)
+
+### Failed Login Detection
+
+![Failed Login Detection](screenshots/failed-login-detection.png)
+
+## Skills Demonstrated
 
 Through this lab, I have practiced:
 
